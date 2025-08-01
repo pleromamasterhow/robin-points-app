@@ -22,5 +22,24 @@
       "points": 2
     }
   ],
-  "history": []
+  "rewards": [
+    {
+      "name": "买玩具",
+      "points_per_dollar": 1
+    },
+    {
+      "name": "市内旅行",
+      "points": 100
+    },
+    {
+      "name": "跨州旅行",
+      "points": 500
+    },
+    {
+      "name": "跨国旅行",
+      "points": 1000
+    }
+  ],
+  "history": [],
+  "redeemed": []
 }
