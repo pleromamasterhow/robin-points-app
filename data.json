@@ -1,0 +1,26 @@
+{
+  "total_points": 1000,
+  "tasks": [
+    {
+      "name": "阅读",
+      "points": 2
+    },
+    {
+      "name": "书写",
+      "points": 2
+    },
+    {
+      "name": "早起",
+      "points": 2
+    },
+    {
+      "name": "早睡",
+      "points": 2
+    },
+    {
+      "name": "整理",
+      "points": 2
+    }
+  ],
+  "history": []
+}
