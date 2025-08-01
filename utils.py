@@ -1,19 +1,34 @@
 import json
-import os
+from datetime import date
 
 DATA_FILE = "data.json"
 
 def load_data():
-    if not os.path.exists(DATA_FILE):
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
         return {
             "total_points": 1000,
-            "tasks": [],
-            "rewards": [],
+            "tasks": [
+                {"name": "阅读", "points": 2},
+                {"name": "书写", "points": 2},
+                {"name": "早起", "points": 2},
+                {"name": "早睡", "points": 2},
+                {"name": "收拾", "points": 2}
+            ],
+            "rewards": [
+                {"name": "买玩具", "points": 0, "date": str(date.today())},
+                {"name": "市内旅行", "points": 100, "date": str(date.today())},
+                {"name": "跨州旅行", "points": 500, "date": str(date.today())},
+                {"name": "跨国旅行", "points": 1000, "date": str(date.today())}
+            ],
             "history": {}
         }
-    with open(DATA_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 def save_data(data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+def get_today_date():
+    return str(date.today())
