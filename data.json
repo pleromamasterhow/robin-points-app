@@ -1,17 +1,44 @@
 {
   "total_points": 1000,
   "tasks": [
-    {"name": "阅读", "points": 2},
-    {"name": "书写", "points": 2},
-    {"name": "早起", "points": 2},
-    {"name": "早睡", "points": 2},
-    {"name": "收拾", "points": 2}
+    {
+      "name": "Reading",
+      "points": 2
+    },
+    {
+      "name": "Writing",
+      "points": 2
+    },
+    {
+      "name": "Wake Up Early",
+      "points": 2
+    },
+    {
+      "name": "Sleep Early",
+      "points": 2
+    },
+    {
+      "name": "Tidy Up",
+      "points": 2
+    }
   ],
   "rewards": [
-    {"name": "买玩具", "points": 0},
-    {"name": "市内旅行", "points": 100},
-    {"name": "跨州旅行", "points": 500},
-    {"name": "跨国旅行", "points": 1000}
+    {
+      "name": "Buy Toy",
+      "points": 0
+    },
+    {
+      "name": "City Trip",
+      "points": 100
+    },
+    {
+      "name": "Interstate Trip",
+      "points": 500
+    },
+    {
+      "name": "International Trip",
+      "points": 1000
+    }
   ],
   "history": {}
 }
