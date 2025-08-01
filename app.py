@@ -1,5 +1,15 @@
 import streamlit as st
+from pages import home, redeem, backfill, settings
 
-st.set_page_config(page_title="Robin Points App", page_icon="⭐")
-st.title("Welcome to Robin's Points Tracker!")
-st.write("Use the sidebar to navigate between pages.")
+st.set_page_config(page_title="Robin's Points Tracker", layout="wide")
+
+st.sidebar.title("Navigation")
+pages = {
+    "Home": home.render,
+    "Redeem": redeem.render,
+    "Backfill": backfill.render,
+    "Settings": settings.render,
+}
+
+page = st.sidebar.radio("Go to", list(pages.keys()))
+pages[page]()
