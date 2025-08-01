@@ -19,9 +19,9 @@ if selected_str not in st.session_state["history"]:
 
 st.subheader(f"Tasks on {selected_str}")
 for task in data["tasks"]:
-    task_id = f"{selected_str}_{task['name']}"
+    task_key = f"{selected_str}_{task['name']}"
     if task["name"] not in st.session_state["history"][selected_str]["completed_tasks"]:
-        if st.button(f"✅ {task['name']} (+{task['points']} pts)", key=task_id):
+        if st.button(f"✅ {task['name']} (+{task['points']} pts)", key=task_key):
             st.session_state["history"][selected_str]["completed_tasks"].append(task["name"])
             st.session_state["total_points"] += task["points"]
             data["history"] = st.session_state["history"]
@@ -30,3 +30,10 @@ for task in data["tasks"]:
             st.rerun()
     else:
         st.markdown(f"✔️ {task['name']} (+{task['points']} pts) - Completed")
+        if st.button(f"Undo {task['name']}", key=f"undo_{task_key}"):
+            st.session_state["history"][selected_str]["completed_tasks"].remove(task["name"])
+            st.session_state["total_points"] -= task["points"]
+            data["history"] = st.session_state["history"]
+            data["total_points"] = st.session_state["total_points"]
+            save_data(data)
+            st.rerun()
