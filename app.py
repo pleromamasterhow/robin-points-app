@@ -23,16 +23,14 @@ for offset in [0, -1, -2]:
         st.session_state["history"][day_str] = {"completed_tasks": [], "redeemed_rewards": []}
 
     for task in data["tasks"]:
-        key = f"{day_str}_{task['name']}"
-        checked = task["name"] in st.session_state["history"][day_str]["completed_tasks"]
-        new_checked = st.checkbox(f"{task['name']} (+{task['points']} pts)", value=checked, key=key)
-        if new_checked != checked:
-            if new_checked:
+        task_id = f"{day_str}_{task['name']}"
+        if task["name"] not in st.session_state["history"][day_str]["completed_tasks"]:
+            if st.button(f"✅ {task['name']} (+{task['points']} pts)", key=task_id):
                 st.session_state["history"][day_str]["completed_tasks"].append(task["name"])
                 st.session_state["total_points"] += task["points"]
-            else:
-                st.session_state["history"][day_str]["completed_tasks"].remove(task["name"])
-                st.session_state["total_points"] -= task["points"]
-            data["history"] = st.session_state["history"]
-            data["total_points"] = st.session_state["total_points"]
-            save_data(data)
+                data["history"] = st.session_state["history"]
+                data["total_points"] = st.session_state["total_points"]
+                save_data(data)
+                st.rerun()
+        else:
+            st.markdown(f"✔️ {task['name']} (+{task['points']} pts) - Completed")
