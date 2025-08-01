@@ -3,12 +3,18 @@ from utils import load_data, save_data
 from datetime import date, timedelta
 
 st.set_page_config(page_title="Robin Points App", layout="centered")
-data = load_data()
+if "refresh" not in st.session_state:
+    st.session_state["refresh"] = False
 
+data = load_data()
 st.title("Daily Check-in")
 st.markdown(f"### 🏆 Current Points: {data['total_points']}")
 
-# 显示今天、昨天、前天
+if st.session_state["refresh"]:
+    st.session_state["refresh"] = False
+    st.experimental_rerun()
+
+# 支持三天打卡
 for offset in [0, -1, -2]:
     day = date.today() + timedelta(days=offset)
     day_str = str(day)
@@ -21,15 +27,13 @@ for offset in [0, -1, -2]:
     for task in data["tasks"]:
         key = f"{day_str}_{task['name']}"
         checked = task["name"] in data["history"][day_str]["completed_tasks"]
-        if st.checkbox(f"{task['name']} (+{task['points']} pts)", value=checked, key=key):
-            if not checked:
+        new_checked = st.checkbox(f"{task['name']} (+{task['points']} pts)", value=checked, key=key)
+        if new_checked != checked:
+            if new_checked:
                 data["history"][day_str]["completed_tasks"].append(task["name"])
                 data["total_points"] += task["points"]
-                save_data(data)
-                st.experimental_rerun()
-        else:
-            if checked:
+            else:
                 data["history"][day_str]["completed_tasks"].remove(task["name"])
                 data["total_points"] -= task["points"]
-                save_data(data)
-                st.experimental_rerun()
+            save_data(data)
+            st.session_state["refresh"] = True
