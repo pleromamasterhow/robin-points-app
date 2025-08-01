@@ -1,9 +1,9 @@
 import streamlit as st
 from utils import load_data, save_data
 
-st.title("⚙️ Settings")
+st.title("Settings")
 data = load_data()
-st.markdown(f"### 🏆 Current Points: {data['total_points']}")
+st.markdown(f"### 🏆 Total Points: {data['total_points']}")
 
 st.subheader("Edit Tasks")
 for task in data["tasks"]:
@@ -12,7 +12,7 @@ for task in data["tasks"]:
 
 if st.button("Save Tasks"):
     save_data(data)
-    st.success("✅ Tasks updated!")
+    st.success("Tasks updated!")
 
 st.subheader("Edit Rewards")
 for reward in data["rewards"]:
@@ -21,4 +21,4 @@ for reward in data["rewards"]:
 
 if st.button("Save Rewards"):
     save_data(data)
-    st.success("✅ Rewards updated!")
+    st.success("Rewards updated!")

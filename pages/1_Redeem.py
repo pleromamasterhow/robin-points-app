@@ -4,7 +4,7 @@ from utils import load_data, save_data, get_today_date
 data = load_data()
 today = get_today_date()
 st.title("Redeem Rewards")
-st.markdown(f"### 🏆 Current Points: {data['total_points']}")
+st.markdown(f"### 🏆 Total Points: {data['total_points']}")
 
 if today not in data["history"]:
     data["history"][today] = {"completed_tasks": [], "redeemed_rewards": []}
@@ -16,7 +16,7 @@ for reward in data["rewards"]:
         if st.button("Redeem Toy"):
             if data["total_points"] >= amount:
                 data["total_points"] -= amount
-                data["history"][today]["redeemed_rewards"].append({"name": "买玩具", "points": amount})
+                data["history"][today]["redeemed_rewards"].append({"name": "Buy Toy", "points": amount})
                 save_data(data)
                 st.success("Toy redeemed!")
     else:
@@ -27,7 +27,7 @@ for reward in data["rewards"]:
                 save_data(data)
                 st.success(f"{reward['name']} redeemed!")
             else:
-                st.warning("Not enough points!")
+                st.warning("Not enough points.")
 
 st.subheader("Undo Redemption")
 for d, record in data["history"].items():
