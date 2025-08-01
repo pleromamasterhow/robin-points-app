@@ -9,6 +9,7 @@ st.markdown(f"### 🏆 Current Points: {data['total_points']}")
 if today not in data["history"]:
     data["history"][today] = {"completed_tasks": [], "redeemed_rewards": []}
 
+st.subheader("Available Rewards")
 for reward in data["rewards"]:
     if reward["name"] == "买玩具":
         amount = st.number_input("Buy Toy - Enter amount to deduct", min_value=1, step=1, key="toy_amount")
@@ -32,9 +33,8 @@ st.subheader("Undo Redemption")
 for d, record in data["history"].items():
     for idx, r in enumerate(record.get("redeemed_rewards", [])):
         label = f"{r['name']} on {d} (-{r['points']} pts)"
-        if st.button(f"Undo: {label}", key=f"{d}_{idx}"):
+        if st.button(f"Undo: {label}", key=f"undo_{d}_{idx}"):
             data["total_points"] += r["points"]
             record["redeemed_rewards"].remove(r)
             save_data(data)
             st.success(f"Undid: {label}")
-            st.stop()
