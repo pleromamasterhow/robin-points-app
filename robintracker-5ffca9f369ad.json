@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "robintracker",
+  "private_key_id": "5ffca9f369adbed9acd7af528216ba62fc928e2d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCs8XM7Y+DpYnbH\n0TA/vxTCe2HBV06QswCr0nGCadrXsYzlze+Wi9Znco8Oqq/T4UbCJqMEx6C8Li8U\n4LSPOhqNo8gVTHpjzxwZ7tX9LGNYLAjhBf8FX9ZFOuY2gQQHWR833BIcXA1AcjhT\neWFEw/ubenBeCWQ5c0v9WvY6k/rtMD1Nndc3cVS8b/IRfUjesExk+2pSWBGERbGB\nwy14LJ6whOEdPwavctCAziKRavnQZ9HtHQOmslb00f+WHLeb2Ko0fIUZx2hfHmDR\nYpsPOl2O1TqHJGhIvvTwMbB4DYSRcHzylEq7qEHOfkUhbX+JvAa+B61Tfcg1Mcng\nDlQCBzUBAgMBAAECggEAH252mfmqG+CoY+KSGVPaKwqPlrsObWALJC9IMAKbIo6D\nZBTMkZjyq7R3aZv9/s03tfudrzW08d6W8f1w84ME5m844x4WNGOk4NW2kJ/rok/G\ngVc8pTZo1AZDZu6F0+wPr3BQ3lSgl/DqaclqszvHU9ep6n1ceNCKpA5PKBBTD55j\nHSowOCVtZGL6UhiWfSQ89WJ/prKb4dvNc5MUziiyKe0y9dAfr1UJmfosAcDBB2DF\n3th07J3Y+5uc8wWxivWuJTvEmj70wzSFi9/mpxg+4xHBP4ytjc85YztQ3xrLyLDC\nc7mzHxy7Si3o0VvR8RGsc/qDhAyvXHTFmdPOplS4zQKBgQDjquSZexNMuCvkVfbW\nnS/xwMc43eLEO1jDofO9L/2FIYLPpg/hL/7KbAY1D5og2iK8qusUDohLSOzQJWVW\nERW489WMFzHy+uR8M78W+Skrtjl59CrqJmArv9mRZjoPZ4lu9Ng02TyU8bu6xwGR\nMZaSWtGTO3QlCvRvwls9BzojkwKBgQDCdyE8e2cA8xXOvFgH6mWt7xMi9u9eQQtg\ns6ycuUob+VMpqodMilWia0XKIbSW2PVA8KUDUrniM8Jw6j5zY3JMpDreJNTMJ3tH\nfs78BAl1LRUi6xitK9/z+Jky+/8cn+hR1VM5yAfatVEED5H3eyqPBkcHD4svz3kU\nQHHOWk6JmwKBgFPzIhROQ9GYX+b0o+6DS7iTY2Levs2pLJQG1f+/AHbk4n17OIPK\n1OMDbk6GkEjo5sI3LDPbH/rSyy/9eh6Ackge8XGU5AA676G02xO3kKzjptIHbQOm\nXvQC7FEnJuWjQhQ+CLOEH0i00oqO8078wA77mif2Vl+KaJQFUOtyDMgtAoGBAJfn\nKM4u8un5+GnyE62zOlPgsYkZbSeqFXInR8lwr2QkoQKmE2QFlxj1RKG9LGy88u8U\nS0HKSCtbFSLQx5Go9+rISrel+5exq4nQk2ym1qByY9VP4Ym8AQd5hGogEEpS2s25\nnnY/O2trQOq0Iug3jKoGVEs+qBHjtgfMw1lWj4zLAoGBANlgMjIJjHxZUdAnn2ua\nnHlfUMVP7BjROHqExPL4VMEUE1Q7DlIDWECWCCd8OAm7Y7mUCI1gZ+SlrTa0bavs\nzw/AKSv2EeyAAut2I4AN5u3vtM9FBw9xQew5sPW0dSufPaGFX2Kgf7SuDyohz9rG\n+VTzPgT3bFy2fn49g6W+u9mX\n-----END PRIVATE KEY-----\n",
+  "client_email": "streamlit-sheet-bot@robintracker.iam.gserviceaccount.com",
+  "client_id": "110545545423469155060",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/streamlit-sheet-bot%40robintracker.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

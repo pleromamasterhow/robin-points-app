@@ -1,56 +1,27 @@
 import streamlit as st
-from utils import load_data, save_data, get_today_date
+from datetime import date
+from sheet_utils import get_tasks_and_rewards, get_history, add_history_entry, remove_history_entry
 
-data = load_data()
-today = get_today_date()
-if "total_points" not in st.session_state:
-    st.session_state["total_points"] = data["total_points"]
-if "history" not in st.session_state:
-    st.session_state["history"] = data["history"]
+st.title("🎁 Redeem Rewards")
+_, rewards = get_tasks_and_rewards()
+history_df = get_history()
+today = str(date.today())
 
-st.title("Redeem Rewards")
-st.markdown(f"### 🏆 Total Points: {st.session_state.total_points}")
-
-if today not in st.session_state["history"]:
-    st.session_state["history"][today] = {"completed_tasks": [], "redeemed_rewards": []}
-
-st.subheader("Available Rewards")
-for reward in data["rewards"]:
+for reward in rewards:
     if reward["name"] == "Buy Toy":
-        amount = st.number_input("Buy Toy - Enter points to deduct", min_value=1, step=1, key="toy_amount")
-        if st.button("Redeem Toy"):
-            if st.session_state["total_points"] >= amount:
-                st.session_state["total_points"] -= amount
-                st.session_state["history"][today]["redeemed_rewards"].append({"name": "Buy Toy", "points": amount})
-                data["total_points"] = st.session_state["total_points"]
-                data["history"] = st.session_state["history"]
-                save_data(data)
-                st.success("Toy redeemed!")
-                st.rerun()
-            else:
-                st.warning("Not enough points.")
+        points = st.number_input("How many points to deduct?", step=1, min_value=1)
+        if st.button("Buy Toy"):
+            add_history_entry(today, "reward", "Buy Toy", -int(points))
+            st.experimental_rerun()
     else:
-        if st.button(f"Redeem {reward['name']} (-{reward['points']} pts)", key=reward["name"]):
-            if st.session_state["total_points"] >= reward["points"]:
-                st.session_state["total_points"] -= reward["points"]
-                st.session_state["history"][today]["redeemed_rewards"].append({"name": reward["name"], "points": reward["points"]})
-                data["total_points"] = st.session_state["total_points"]
-                data["history"] = st.session_state["history"]
-                save_data(data)
-                st.success(f"{reward['name']} redeemed!")
-                st.rerun()
-            else:
-                st.warning("Not enough points.")
+        if st.button(f"{reward['name']} (-{reward['points']})"):
+            add_history_entry(today, "reward", reward["name"], -int(reward["points"]))
+            st.experimental_rerun()
 
+# Undo 功能
 st.subheader("Undo Redemption")
-for d, record in st.session_state["history"].items():
-    for idx, r in enumerate(record.get("redeemed_rewards", [])):
-        label = f"{r['name']} on {d} (-{r['points']} pts)"
-        if st.button(f"Undo: {label}", key=f"undo_{d}_{idx}"):
-            st.session_state["total_points"] += r["points"]
-            record["redeemed_rewards"].remove(r)
-            data["total_points"] = st.session_state["total_points"]
-            data["history"] = st.session_state["history"]
-            save_data(data)
-            st.success(f"Undid: {label}")
-            st.rerun()
+rewards_today = history_df[(history_df["date"] == today) & (history_df["type"] == "reward")]
+for _, row in rewards_today.iterrows():
+    if st.button(f"Undo {row['name']}", key=f"undo_redeem_{row['name']}"):
+        remove_history_entry(today, "reward", row["name"])
+        st.experimental_rerun()
