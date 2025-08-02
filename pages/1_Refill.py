@@ -27,7 +27,6 @@ if st.button("Confirm refill"):
             to_add.append({"date": selected_date.isoformat(), "type": "Task", "name": task["name"], "points": int(task["points"])})
     if to_add:
         batch_add_points(to_add)
-        st.success(f"{len(to_add)} records submitted!")
-        st.experimental_rerun()
+        st.success(f"{len(to_add)} records submitted! Please refresh the page to see updated status.")
     else:
         st.info("No new tasks to refill.")

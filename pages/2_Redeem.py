@@ -17,10 +17,8 @@ else:
 if st.button("Confirm Redeem"):
     to_add = [{"date": date.today().isoformat(), "type": "Reward", "name": selected_reward, "points": points}]
     batch_add_points(to_add)
-    st.success(f"Redeemed: {selected_reward} ({-points} points)")
-    st.experimental_rerun()
+    st.success(f"Redeemed: {selected_reward} ({-points} points). Please refresh the page to see updated status.")
 
 if st.button("Undo last redemption"):
     undo_last_redeem()
-    st.success("Last redeem record undone.")
-    st.experimental_rerun()
+    st.success("Last redeem record undone. Please refresh the page to see updated status.")

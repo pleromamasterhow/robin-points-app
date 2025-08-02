@@ -15,5 +15,4 @@ edited_rewards = st.experimental_data_editor(reward_data, num_rows="dynamic", ke
 
 if st.button("Save Changes"):
     update_tasks_and_rewards(edited_tasks, edited_rewards)
-    st.success("Tasks and Rewards updated!")
-    st.experimental_rerun()
+    st.success("Tasks and Rewards updated! Please refresh the page to see updated status.")
