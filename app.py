@@ -5,14 +5,17 @@ from datetime import date, timedelta
 st.set_page_config(page_title="Robin Points Tracker", layout="centered")
 st.title("Robin Points Tracker")
 
+total_points = get_total_points()
+st.metric("Total Points", total_points)
+
 today = date.today()
-dates = [today - timedelta(days=i) for i in range(3)]
+dates = [today, today - timedelta(days=1)]
 tasks, _ = get_tasks_and_rewards()
 
 if "pending_checks" not in st.session_state:
     st.session_state["pending_checks"] = {}
 
-for d in reversed(dates):
+for d in dates:
     st.subheader(d.strftime("%A, %Y-%m-%d"))
     for task in tasks:
         task_name = task["name"]
@@ -31,9 +34,6 @@ if st.button("Confirm"):
     if to_add:
         batch_add_points(to_add)
         st.success(f"{len(to_add)} records submitted!")
-        st.session_state["pending_checks"] = {}
         st.experimental_rerun()
     else:
         st.info("No tasks selected.")
-
-st.metric("Total Points", get_total_points())

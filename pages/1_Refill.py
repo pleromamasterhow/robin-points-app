@@ -1,12 +1,12 @@
 import streamlit as st
-from sheet_utils import get_tasks_and_rewards, batch_add_points, get_history_for_date
+from sheet_utils import get_tasks_and_rewards, batch_add_points, get_history_for_date, get_total_points
 from datetime import date
 
 st.title("Refill or Edit History")
+st.metric("Total Points", get_total_points())
+
 tasks, _ = get_tasks_and_rewards()
-
 selected_date = st.date_input("Select date to refill:", value=date.today())
-
 history = get_history_for_date(selected_date.isoformat())
 done_tasks = set([r["name"] for r in history if r["type"].lower() == "task"])
 
@@ -28,7 +28,6 @@ if st.button("Confirm refill"):
     if to_add:
         batch_add_points(to_add)
         st.success(f"{len(to_add)} records submitted!")
-        st.session_state["refill_checks"] = {}
         st.experimental_rerun()
     else:
         st.info("No new tasks to refill.")

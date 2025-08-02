@@ -1,9 +1,10 @@
 import streamlit as st
-from sheet_utils import get_tasks_and_rewards, update_tasks_and_rewards
+from sheet_utils import get_tasks_and_rewards, update_tasks_and_rewards, get_total_points
 
 st.title("Settings (Edit Tasks and Rewards)")
-tasks, rewards = get_tasks_and_rewards()
+st.metric("Total Points", get_total_points())
 
+tasks, rewards = get_tasks_and_rewards()
 st.subheader("Tasks")
 task_data = [{"name": t["name"], "points": t["points"]} for t in tasks]
 edited_tasks = st.experimental_data_editor(task_data, num_rows="dynamic", key="tasks")

@@ -3,8 +3,9 @@ from sheet_utils import get_tasks_and_rewards, batch_add_points, undo_last_redee
 from datetime import date
 
 st.title("Redeem Rewards")
-_, rewards = get_tasks_and_rewards()
+st.metric("Total Points", get_total_points())
 
+_, rewards = get_tasks_and_rewards()
 selected_reward = st.selectbox("Select reward to redeem:", [r["name"] for r in rewards])
 
 if selected_reward == "Buy Toy":
@@ -23,5 +24,3 @@ if st.button("Undo last redemption"):
     undo_last_redeem()
     st.success("Last redeem record undone.")
     st.experimental_rerun()
-
-st.metric("Total Points", get_total_points())
