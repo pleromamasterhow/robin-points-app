@@ -1,5 +1,5 @@
 import streamlit as st
-from sheet_utils import get_tasks_and_rewards, batch_add_points, get_history_for_date, get_total_points
+from sheet_utils import get_tasks_and_rewards, sync_points_for_dates, get_history_for_date, get_total_points
 from datetime import date
 
 st.title("Refill or Edit History")
@@ -15,18 +15,18 @@ if "refill_checks" not in st.session_state:
 
 for task in tasks:
     key = f"{selected_date}-{task['name']}"
-    default = (task["name"] in done_tasks) or st.session_state["refill_checks"].get(key, False)
-    checked = st.checkbox(f"{task['name']} (+{task['points']})", key=key, value=default)
-    st.session_state["refill_checks"][key] = checked
+    checked = (task["name"] in done_tasks) if key not in st.session_state["refill_checks"] else st.session_state["refill_checks"][key]
+    st.session_state["refill_checks"][key] = st.checkbox(f"{task['name']} (+{task['points']})", key=key, value=checked)
 
 if st.button("Confirm refill"):
-    to_add = []
+    update_list = []
     for task in tasks:
         key = f"{selected_date}-{task['name']}"
-        if st.session_state["refill_checks"].get(key) and task["name"] not in done_tasks:
-            to_add.append({"date": selected_date.isoformat(), "type": "Task", "name": task["name"], "points": int(task["points"])})
-    if to_add:
-        batch_add_points(to_add)
-        st.success(f"{len(to_add)} records submitted! Please refresh the page to see updated status.")
+        checked = st.session_state["refill_checks"][key]
+        if checked != (task["name"] in done_tasks):
+            update_list.append({"date": selected_date.isoformat(), "task": task["name"], "add": checked, "points": int(task["points"])})
+    if update_list:
+        sync_points_for_dates(update_list)
+        st.success("Updated! Please refresh the page to see the latest status.")
     else:
-        st.info("No new tasks to refill.")
+        st.info("No changes detected.")

@@ -55,3 +55,21 @@ def update_tasks_and_rewards(task_rows, reward_rows):
     ws.append_row(["type", "name", "points"])
     for row in new_data:
         ws.append_row(row)
+
+def sync_points_for_dates(update_list):
+    ws = client.open(SHEET_NAME).worksheet(HISTORY_SHEET)
+    all_data = ws.get_all_values()
+    header = all_data[0] if all_data else ["date", "type", "name", "points"]
+    records = all_data[1:] if len(all_data) > 1 else []
+    # 删除所有撤销的
+    for upd in update_list:
+        if not upd["add"]:
+            for i in range(len(records)):
+                if records[i][0] == upd["date"] and records[i][1].lower() == "task" and records[i][2] == upd["task"]:
+                    ws.delete_rows(i+2)  # +2: header+1
+                    records.pop(i)
+                    break
+    # 新增所有新打卡的
+    for upd in update_list:
+        if upd["add"]:
+            ws.append_row([upd["date"], "Task", upd["task"], upd["points"]])
