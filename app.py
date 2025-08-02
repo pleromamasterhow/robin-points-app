@@ -9,7 +9,6 @@ st.title("Robin Points Tracker")
 def load_total_points():
     return get_total_points()
 
-# "假刷新"分数
 if "total_points" not in st.session_state:
     st.session_state["total_points"] = load_total_points()
 
