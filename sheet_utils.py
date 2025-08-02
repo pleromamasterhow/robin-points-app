@@ -1,64 +1,50 @@
+import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
-import pandas as pd
 
-SHEET_NAME = "Robin Points Tracker"
+scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
+client = gspread.authorize(creds)
+
+SHEET_NAME = "RobinPoints"
 TASKS_SHEET = "TasksAndRewards"
 HISTORY_SHEET = "History"
-CREDS_FILE = "robintracker-5ffca9f369ad.json"
-
-def get_client():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(CREDS_FILE, scope)
-    client = gspread.authorize(creds)
-    return client
 
 def get_tasks_and_rewards():
-    client = get_client()
-    sheet = client.open(SHEET_NAME).worksheet(TASKS_SHEET)
-    records = sheet.get_all_records()
-    tasks = [r for r in records if r["type"] == "task"]
-    rewards = [r for r in records if r["type"] == "reward"]
+    sheet = client.open(SHEET_NAME)
+    data = sheet.worksheet(TASKS_SHEET).get_all_records()
+    tasks = [row for row in data if row["Type"] == "Task"]
+    rewards = [row for row in data if row["Type"] == "Reward"]
     return tasks, rewards
 
-def add_task(name, points):
-    client = get_client()
-    sheet = client.open(SHEET_NAME).worksheet(TASKS_SHEET)
-    sheet.append_row(["task", name, points])
+def get_total_points():
+    records = client.open(SHEET_NAME).worksheet(HISTORY_SHEET).get_all_records()
+    return 1000 + sum(int(r["Points"]) for r in records)
 
-def add_reward(name, points):
-    client = get_client()
-    sheet = client.open(SHEET_NAME).worksheet(TASKS_SHEET)
-    sheet.append_row(["reward", name, points])
-
-def update_tasks_and_rewards(new_data):
-    client = get_client()
-    sheet = client.open(SHEET_NAME).worksheet(TASKS_SHEET)
-    sheet.clear()
-    sheet.append_row(["type", "name", "points"])
-    for row in new_data:
-        sheet.append_row([row["type"], row["name"], row["points"]])
-
-def get_history():
-    client = get_client()
+def add_points(task, points, day):
     sheet = client.open(SHEET_NAME).worksheet(HISTORY_SHEET)
-    data = sheet.get_all_records()
-    return pd.DataFrame(data)
+    sheet.append_row([str(day), task, int(points)])
 
-def add_history_entry(date, type_, name, points):
-    client = get_client()
+def redeem_reward(reward, cost):
     sheet = client.open(SHEET_NAME).worksheet(HISTORY_SHEET)
-    sheet.append_row([date, type_, name, points])
+    sheet.append_row([str(datetime.today().date()), reward, -int(cost)])
 
-def remove_history_entry(date, type_, name):
-    df = get_history()
-    idx = df[(df["date"] == date) & (df["type"] == type_) & (df["name"] == name)].index
-    if not idx.empty:
-        df = df.drop(idx[0])
-        client = get_client()
-        sheet = client.open(SHEET_NAME).worksheet(HISTORY_SHEET)
-        sheet.clear()
-        sheet.append_row(["date", "type", "name", "points"])
-        for _, row in df.iterrows():
-            sheet.append_row([row["date"], row["type"], row["name"], row["points"]])
+def undo_last_action():
+    sheet = client.open(SHEET_NAME).worksheet(HISTORY_SHEET)
+    data = sheet.get_all_values()
+    if len(data) > 1:
+        sheet.delete_rows(len(data))
+
+def get_history_for_date(day):
+    records = client.open(SHEET_NAME).worksheet(HISTORY_SHEET).get_all_records()
+    return [r for r in records if r["Date"] == str(day)]
+
+def update_tasks_and_rewards(tasks, rewards):
+    worksheet = client.open(SHEET_NAME).worksheet(TASKS_SHEET)
+    worksheet.clear()
+    worksheet.append_row(["Type", "Task", "Points", "Reward"])
+    for t in tasks:
+        worksheet.append_row(["Task", t["Task"], t["Points"], ""])
+    for r in rewards:
+        worksheet.append_row(["Reward", "", r["Points"], r["Reward"]])
