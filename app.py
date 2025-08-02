@@ -25,6 +25,7 @@ try:
     if "pending_checks" not in st.session_state:
         st.session_state["pending_checks"] = {}
 
+    # 页面顶部总分，优先用 session_state 值
     st.metric("Total Points", st.session_state["total_points"])
 
     for i, d in enumerate(dates):
@@ -40,6 +41,7 @@ try:
                 value=checked
             )
 
+    # Confirm 按钮，点击后立即写入、刷新总分
     if st.button("Confirm", use_container_width=True):
         update_list = []
         for i, d in enumerate(dates):
@@ -52,9 +54,12 @@ try:
         if update_list:
             sync_points_for_dates(update_list)
             clear_caches()
-            st.session_state["total_points"] = load_total_points()
+            new_total = load_total_points()
+            st.session_state["total_points"] = new_total
+            st.metric("Total Points", new_total)   # 立即渲染最新分数
             st.success("Updated! Total Points refreshed.")
         else:
             st.info("No changes detected.")
+
 except Exception as ex:
     safe_api_message(ex)
