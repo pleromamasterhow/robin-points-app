@@ -18,6 +18,7 @@ def get_gspread_client():
     creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"], scopes=scope)
     return gspread.authorize(creds)
 
+@st.cache_data(ttl=20)
 def get_tasks_and_rewards():
     try:
         client = get_gspread_client()
@@ -31,6 +32,7 @@ def get_tasks_and_rewards():
         safe_api_message(ex)
         return [], []
 
+@st.cache_data(ttl=20)
 def get_total_points():
     try:
         client = get_gspread_client()
@@ -42,6 +44,7 @@ def get_total_points():
         safe_api_message(ex)
         return 0
 
+@st.cache_data(ttl=20)
 def get_history_for_date(qdate):
     try:
         client = get_gspread_client()
@@ -54,6 +57,7 @@ def get_history_for_date(qdate):
         safe_api_message(ex)
         return []
 
+@st.cache_data(ttl=20)
 def get_history_for_dates(date_list):
     try:
         client = get_gspread_client()
@@ -126,3 +130,9 @@ def sync_points_for_dates(update_list):
                 ws.append_row([upd["date"], "Task", upd["task"], upd["points"]])
     except Exception as ex:
         safe_api_message(ex)
+
+def clear_caches():
+    get_tasks_and_rewards.clear()
+    get_total_points.clear()
+    get_history_for_date.clear()
+    get_history_for_dates.clear()
