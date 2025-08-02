@@ -14,8 +14,8 @@ st.metric("Total Points", total_points)
 for d in reversed(dates):
     st.header(d.strftime("%A, %Y-%m-%d"))
     for task in tasks:
-        task_name = task["Task"]
-        task_points = int(task["Points"])
+        task_name = task["name"]
+        task_points = int(task["points"])
         if st.button(f"{task_name} (+{task_points})", key=f"{d}-{task_name}"):
             add_points(task_name, task_points, d)
             st.experimental_rerun()

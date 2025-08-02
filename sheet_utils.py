@@ -17,14 +17,14 @@ client = gspread.authorize(creds)
 def get_tasks_and_rewards():
     sheet = client.open(SHEET_NAME)
     data = sheet.worksheet(TASKS_SHEET).get_all_records()
-    tasks = [row for row in data if row.get("Type") == "Task"]
-    rewards = [row for row in data if row.get("Type") == "Reward"]
+    tasks = [row for row in data if row.get("type") == "Task"]
+    rewards = [row for row in data if row.get("type") == "Reward"]
     return tasks, rewards
 
 def get_total_points():
     sheet = client.open(SHEET_NAME)
     history = sheet.worksheet(HISTORY_SHEET).get_all_records()
-    return sum(int(row["Points"]) for row in history)
+    return sum(int(row.get("points", 0) or 0) for row in history)
 
 def add_points(task, points, action_date=None):
     if action_date is None:
@@ -32,10 +32,10 @@ def add_points(task, points, action_date=None):
     elif isinstance(action_date, date):
         action_date = action_date.isoformat()
     sheet = client.open(SHEET_NAME).worksheet(HISTORY_SHEET)
-    sheet.append_row([action_date, task, int(points)])
+    sheet.append_row([action_date, "Task", task, int(points)])
 
 def get_history_for_date(query_date):
     sheet = client.open(SHEET_NAME)
     history = sheet.worksheet(HISTORY_SHEET).get_all_records()
     q = str(query_date)
-    return [row for row in history if row["Date"] == q]
+    return [row for row in history if row.get("date") == q]
