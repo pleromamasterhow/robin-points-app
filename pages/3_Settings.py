@@ -7,11 +7,11 @@ try:
     tasks, rewards = get_tasks_and_rewards()
     st.subheader("Tasks")
     task_data = [{"name": t["name"], "points": t["points"]} for t in tasks]
-    edited_tasks = st.experimental_data_editor(task_data, num_rows="dynamic", key="tasks")
+    edited_tasks = st.data_editor(task_data, num_rows="dynamic", key="tasks")
 
     st.subheader("Rewards")
     reward_data = [{"name": r["name"], "points": r["points"]} for r in rewards]
-    edited_rewards = st.experimental_data_editor(reward_data, num_rows="dynamic", key="rewards")
+    edited_rewards = st.data_editor(reward_data, num_rows="dynamic", key="rewards")
 
     if st.button("Save Changes"):
         update_tasks_and_rewards(edited_tasks, edited_rewards)
